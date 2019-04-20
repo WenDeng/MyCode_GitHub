@@ -9,7 +9,7 @@
 # /dbg         # 只忽略当前目录下的dbg文件和目录，子目录的dbg不在忽略范围内
 
 /build/CMakeFiles
-/build/*make*
+/build/*ake*
 /lib/*
 /bin/test
 .vscode
