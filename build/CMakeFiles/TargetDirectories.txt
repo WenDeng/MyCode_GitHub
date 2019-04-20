@@ -1,3 +1,0 @@
-/mnt/f/wls program/MyCode_GitHub/build/CMakeFiles/rebuild_cache.dir
-/mnt/f/wls program/MyCode_GitHub/build/CMakeFiles/test.dir
-/mnt/f/wls program/MyCode_GitHub/build/CMakeFiles/edit_cache.dir
