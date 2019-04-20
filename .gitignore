@@ -1,4 +1,5 @@
 build/*
+！build
 lib/*
-bin/*
+bin/test
 .vscode
