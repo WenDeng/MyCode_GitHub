@@ -1,5 +1,14 @@
-build/*
-！build
-lib/*
-bin/test
+# git rm -r --cached ignore_file  #这个可以用来ignore已经提交的file
+
+# *.[oa]       # 忽略*.o和*.a文件
+# {ab,bb,cx}   # 代表ab,bb,cx中任一类型即可
+# [abc]        # 代表a,b,c中任一字符即可
+# [ ^abc]      # 代表必须不是a,b,c中任一字符
+
+# dbg !dbg/    # 只忽略dbg文件，不忽略dbg目录
+# /dbg         # 只忽略当前目录下的dbg文件和目录，子目录的dbg不在忽略范围内
+
+/build/*make*
+/lib/*
+/bin/test
 .vscode
