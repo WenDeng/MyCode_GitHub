@@ -10,7 +10,7 @@ int main()
     vector<int> data1={1,2,3,4,5};
     vector<int> data2(5,3);//初始化空间为5，值为3
 
-    vector<int>::iterator iter=find(data1.begin(),data1.end(),2);
+    vector<int>::iterator iter=find(data1.begin(),data1.end(),2);//查找某个值在的迭代器位置。
     cout<<data1.front()<<" "<<data1.back()<<endl;//获取第一个和最后一个值
     cout<<*data1.begin()<<" "<<*data1.end()<<endl; //获取迭代器，并取值
     data1.push_back(6);//放入值
