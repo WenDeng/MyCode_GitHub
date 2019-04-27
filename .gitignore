@@ -12,4 +12,4 @@
 /build/*ake*
 /lib/*
 /bin/test
-.vscode
+.vscode/
