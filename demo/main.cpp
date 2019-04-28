@@ -1,51 +1,28 @@
-#include <iostream>
-#include <memory>
 #include <vector>
 #include <algorithm>
-#include <cstdio>
+#include <iostream>
+
 using namespace std;
 
 int main()
 {
-    int value[10] = {1, 2, 3, 4, 5, 5, 4, 4, 5, 6};
-    vector<int> data1 = {1, 2};
-    vector<int> data2 = {1, 3, 4, 5, 4, 3, 5, 2};
-    vector<int> data3 = {1, 2, 3, 4, 5, 4, 3, 5};
+    int array[]={1,2,3,4,5};
+    vector<int> data(5); //初始化空间容量为5，默认值为0
+    vector<int> data1 = {1, 2, 3, 4, 5};
+    vector<int> data2(5, 3); //初始化空间为5，值为3
+    vector<int> data3(array, array+3); //初始化空间为5，值为3
+    // for(int foo:data3) cout<<foo<<" ";
 
-    int k = 6, s = 7;
-    k = static_cast<int &&>(s);
-    cout << k << " " << s << endl;
-    
-    cout<<endl<<"对POD类型的数据进行move,不会改变其值!!"<<endl;
-    k = std::move(s);
-    cout << k << " " << s << endl;
+    // vector<int>::iterator iter = find(data1.begin(), data1.end(), 2); //查找某个值在的迭代器位置。
+    // cout << data1.front() << " " << data1.back() << endl;             //获取第一个和最后一个值
+    // cout << *data1.begin() << " " << *data1.end() << endl;            //获取迭代器，并取值
+    // data1.push_back(6);                                               //放入值
+    // data1.pop_back();                                                 //删掉最后一个元素，void返回
+    // data1.erase(data1.end());                                         //删除指定迭代器的值
+    // data1.resize(20);                                                 //从新设置存值空间，默认初始为0
+    // data1.clear();                                                    //清楚全部内容
+    cout<<"\n"<<array[0];
+    cout<<"\r"<<array[1];
+    cout<<"\r\n"<<array[2];
 
-    cout << endl
-         << "对非POD类型的数据进行move,会改变括号里的值!!" << endl;
-    // data1 = std::move(data2);
-    // data1 = std::move(data3);
-    data1 = static_cast<vector<int>&&>(data2);
-
-    cout << endl
-         << "after move:" << endl
-         << "data1:";
-    for (int foo : data1)
-        cout << foo << " ";
-
-    cout << endl
-         << "data2:";
-    for (int foo : data2)
-        cout << foo << " ";
-
-    cout << endl<< "data3:";
-    for (int foo : data3)
-        cout << foo << " ";
-    cout << endl;
-
-    int m=3,n=5;
-    int *p=&m,*q=&n;
-    p=std::move(q);
-    cout<<*p<<" "<<*q<<endl;
-
-    return 0;
 }
