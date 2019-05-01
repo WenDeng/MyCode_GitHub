@@ -1,37 +1,35 @@
+#include <deque>
 #include <iostream>
-#include <memory>
-#include <vector>
 #include <algorithm>
-#include <cstdio>
+#include<vector>
+#include <memory>
 using namespace std;
 
-class Solution {
-public:
-    void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
-        //也不知道是谁想到的这种方法，反正很牛逼
-        int result=0,k=1;
-        if(data.size()&1==1) return;//单数个数表示不合法
-        
-        for(auto foo:data) result^=foo;
-        while(!(result&k)) k=k<<1;//找到result不为0的最低位
-        
-        if(!result) return;//表示所有的数都是成对出现的，也不合法
-        for(auto foo:data) 
-        {
-            if(foo&k) *num1= (*num1)^foo;//对应位为1
-            else *num2= (*num2)^foo;//对应为0
-        }
-    }
-};
+
 int main()
 {
-   int value[10]={1,2,3,4,5,5,4,4,5,6};
-   vector<int> data={1,2,3,4,5,4,3,5};
-//    vector<int> data={1,2};
-//    vector<int> data={1,3,4,5,4,3,5,2};
-   int res1=0,res2=0;
-   Solution sol;
-   sol.FindNumsAppearOnce(data,&res1,&res2);
-   cout<<res1<<" "<<res2<<endl;
-   return 0;
+    // deque<int> data(8, 3); //buffsize为512/4=128;
+    // deque<int>::iterator iter;
+    // cout << iter._S_buffer_size() << endl;
+    // data.push_back(4);
+    // data.push_front(1);
+    // for(int foo:data) cout<<foo<<" ";
+    // cout<<endl<<data[1]<<endl;
+    int a=6;
+    int &b=a;
+    int c=b;
+    cout<<a<<"  "<<c<<endl;
+    vector<int> p,q;
+
+    cout<<&a<<"   "<<&b<<endl<<endl;
+    q.push_back(std::move(a));
+    p.push_back(std::move(b));
+    cout<<&p<<"  "<<&q<<"  "<<&p[0]<<"  "<<&q[0]<<endl;
+
+    p=std::move(q);
+    // cout<<q[0]<<endl;
+    cout<<&q<<"  "<<&p<<"  "<<&q[0]<<"  "<<&p[0]<<endl;
+
+
+    return 0;
 }

@@ -16,8 +16,13 @@ int main()
     // lst.pop_back();
 
 
-    list<int>::iterator iter=find(lst.begin(),lst.end(),2);
-    lst2.splice(iter,lst.begin,lst.end());//将lst链表拼接到lst2中
+    list<int>::iterator iter=find(lst2.begin(),lst2.end(),2);
+    // lst2.splice(iter,lst.begin,lst.end());//将lst链表拼接到lst2中
+    lst.merge(lst2);//将两个有序链表进行合并
+    lst.reverse();//反转当前链表
+    lst.sort();//list不能使用STL算法sort(),必须使用自己的sort member function。
+
+
     lst2.reverse();//反转链表
     lst2.sort();//排序链表的元素
     lst.insert(iter,5);//插入值
