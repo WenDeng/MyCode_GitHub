@@ -23,23 +23,17 @@ int main()
 
     cout << endl
          << "对非POD类型的数据进行move,会改变括号里的值!!" << endl;
-    // data1 = std::move(data2);
+    data1 = std::move(data2);
     // data1 = std::move(data3);
-    data1 = static_cast<vector<int> &&>(data2);
+//     data1 = static_cast<vector<int> &&>(data2);
 
-    cout << endl
-         << "after move:" << endl
-         << "data1:";
-    for (int foo : data1)
-        cout << foo << " ";
+    cout << endl<< "after move:" << endl<< "data1:";
+    for (int foo : data1)  cout << foo << " ";
 
-    cout << endl
-         << "data2:";
-    for (int foo : data2)
-        cout << foo << " ";
+    cout << endl<< "data2:";
+    for (int foo : data2)  cout << foo << " ";
 
-    cout << endl
-         << "data3:";
+    cout << endl << "data3:";
     for (int foo : data3)
         cout << foo << " ";
     cout << endl;
