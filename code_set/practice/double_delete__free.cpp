@@ -53,6 +53,7 @@ public:
     {
         cout<<"Test desconstructor"<<endl;
         delete p;//讲道理，浅拷贝重复两次释放应该会出错的吧！
+        p=NULL;
     }
 private:
     int *p;
@@ -80,9 +81,11 @@ int main()
     q->showAdrress();
 
     cout<<endl;
-    int *temp=(int*)malloc(sizeof(int)); //测试能否对一个指针free两次
-    free(temp);
-    free(temp);
+    int *tempa=NULL,*tempb=NULL;
+    tempa=(int*)malloc(sizeof(int)); //测试能否对一个指针free两次
+    tempb=tempa;
+    free(tempa);
+    free(tempb);
 
     return 0;
 }
