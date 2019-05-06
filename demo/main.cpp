@@ -1,25 +1,29 @@
 #include <deque>
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <memory>
+#include <sstream>
+#include <string>
+#include <queue>
 using namespace std;
 
-
+//priority queue的底层容器是vector,其没有迭代器，
 int main()
 {
-    deque<int> data(8, 3); //buffsize为512/4=128;
-    deque<int>::iterator iter;
-    cout << iter._S_buffer_size() << endl;
-    data.push_back(4);
-    data.pop_back();
-    data.push_front(1);
-    data.pop_front();
-    data.erase(data.begin());
-    data.erase(data.begin(),data.end());
-    data.insert(data.begin(),4);
-    data.clear();
-    for(int foo:data) cout<<foo<<" ";
-    cout<<endl<<data[1]<<endl;
- 
+    int a[20]={1,2,3,4,5,5,6,7,8,9};
+    vector<int> vec(a,a+11); 
+
+    priority_queue<int> prique(vec.begin(),vec.end());
+
+    prique.push(23);
+    prique.push(24);
+    cout<<"size: "<<prique.size()<<endl;
+    while(!prique.empty())
+    {
+        cout<<prique.top()<<" ";
+        prique.pop();
+    }
+    cout<<endl;
     return 0;
 }
