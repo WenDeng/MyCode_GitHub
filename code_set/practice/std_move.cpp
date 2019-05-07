@@ -8,6 +8,7 @@
 #include <queue>
 using namespace std;
 
+//std::move进行右值引用，可以将左值和右值转为右值引用， 这种操作意味着被引用的值将不再被使用，否则会引起“不可预期的结果”。
 
 class Base
 {
@@ -42,7 +43,7 @@ int main()
     k=8;
     cout<<k<<endl;
 
-    cout << endl << "常规数组-----------------------------------------" << endl;
+    cout << endl << "常规数组（自动清空）-----------------------------------------" << endl;
     vector<int> data1 = {1, 2};
     vector<int> data2 = {1, 3, 4, 5, 4, 3, 5, 2};
     data1 = std::move(data2);
@@ -67,14 +68,14 @@ int main()
     ba.show();
     bb.show();
 
-    cout << endl << "string -----------------------------------------" << endl;
+    cout << endl << "string（自动清空） -----------------------------------------" << endl;
     string str=std::move("deng wen");
     string str1("luo chao");
     str1=std::move(str);
     cout<<&str<<"   "<<str<<endl;
     cout<<&str1<<"   "<<str1<<endl;
 
-    cout << endl << "vector -----------------------------------------" << endl;
+    cout << endl << "vector（自动清空） -----------------------------------------" << endl;
     vector<int> vec1={1,2,3,4,5};
     vector<int> vec2={9,0,9};
     vec1=std::move(vec2);
