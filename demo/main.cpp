@@ -17,11 +17,7 @@ public:
         p=new int(1);
         q=*p=k;
     }
-    // Base(Base &B)
-    // {
-    //     cout<<"copy constructor"<<endl;
-    //     *p=*B.p;
-    // }
+
     ~Base()
     {
         delete p;
@@ -77,5 +73,15 @@ int main()
     str1=std::move(str);
     cout<<&str<<"   "<<str<<endl;
     cout<<&str1<<"   "<<str1<<endl;
+
+    cout << endl << "vector -----------------------------------------" << endl;
+    vector<int> vec1={1,2,3,4,5};
+    vector<int> vec2={9,0,9};
+    vec1=std::move(vec2);
+    for (int foo : vec1)  cout << foo << "  ";cout<<endl;
+    for (int i=0;i<vec1.size();i++)  cout << &vec1[i] << "   ";
+    cout<<endl;
+    
+    
     return 0;
 }
