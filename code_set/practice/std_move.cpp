@@ -1,47 +1,88 @@
+#include <deque>
 #include <iostream>
-#include <memory>
-#include <vector>
 #include <algorithm>
-#include <cstdio>
+#include <vector>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <queue>
 using namespace std;
+
+//std::move进行右值引用，可以将左值和右值转为右值引用， 这种操作意味着被引用的值将不再被使用，否则会引起“不可预期的结果”。
+
+class Base
+{
+public:
+    Base(int k)
+    {
+        p=new int(1);
+        q=*p=k;
+    }
+
+    ~Base()
+    {
+        delete p;
+    }
+    void show()
+    {
+        cout<<"q address: "<<&q<<endl;
+        cout<<"p address: "<<p<<endl;
+    }
+private:
+    int q;
+    int *p;
+};
 
 int main()
 {
-    int value[10] = {1, 2, 3, 4, 5, 5, 4, 4, 5, 6};
+    cout << endl << "常规变量-----------------------------------------" << endl;
+    int k = 6, s = 7;
+    cout << k << " " << s << endl;
+    k=std::move(s);
+    cout << k << " " << s << endl;
+    k=8;
+    cout<<k<<endl;
+
+    cout << endl << "常规数组（自动清空）-----------------------------------------" << endl;
     vector<int> data1 = {1, 2};
     vector<int> data2 = {1, 3, 4, 5, 4, 3, 5, 2};
-    vector<int> data3 = {1, 2, 3, 4, 5, 4, 3, 5};
-
-    int k = 6, s = 7;
-    k = static_cast<int &&>(s);
-    cout << k << " " << s << endl;
-
-    cout << endl
-         << "对POD类型的数据进行move,不会改变其值!!" << endl;
-    k = std::move(s);
-    cout << k << " " << s << endl;
-
-    cout << endl
-         << "对非POD类型的数据进行move,会改变括号里的值!!" << endl;
     data1 = std::move(data2);
-    // data1 = std::move(data3);
 //     data1 = static_cast<vector<int> &&>(data2);
-
-    cout << endl<< "after move:" << endl<< "data1:";
+    cout<< "after move:" << endl<< "data1:";
     for (int foo : data1)  cout << foo << " ";
 
     cout << endl<< "data2:";
     for (int foo : data2)  cout << foo << " ";
 
-    cout << endl << "data3:";
-    for (int foo : data3)
-        cout << foo << " ";
-    cout << endl;
-
+    cout<< endl << endl << "指针变量-----------------------------------------" << endl;
     int m = 3, n = 5;
     int *p = &m, *q = &n;
     p = std::move(q);
-    cout << *p << " " << *q << endl;
+    cout<<p<<"       "<<*p<<endl;
+    cout<<q<<"       " << *q << endl;
 
+    cout << endl << "class 对象-----------------------------------------" << endl;
+    Base ba(5);
+    Base bb(2);
+    bb=std::move(ba);
+    ba.show();
+    bb.show();
+
+    cout << endl << "string（自动清空） -----------------------------------------" << endl;
+    string str=std::move("deng wen");
+    string str1("luo chao");
+    str1=std::move(str);
+    cout<<&str<<"   "<<str<<endl;
+    cout<<&str1<<"   "<<str1<<endl;
+
+    cout << endl << "vector（自动清空） -----------------------------------------" << endl;
+    vector<int> vec1={1,2,3,4,5};
+    vector<int> vec2={9,0,9};
+    vec1=std::move(vec2);
+    for (int foo : vec1)  cout << foo << "  ";cout<<endl;
+    for (int i=0;i<vec1.size();i++)  cout << &vec1[i] << "   ";
+    cout<<endl;
+    
+    
     return 0;
 }
