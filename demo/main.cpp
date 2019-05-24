@@ -6,34 +6,30 @@
 #include <set>
 #include <map>
 #include <string>
+#include <list>
+#include <functional>
 using namespace std;
 
-class Solution
-{
+class Solution {
 public:
-    Solution(){m_data=0;}
-    Solution(int k):m_data(k){cout<<"constructor"<<endl;}
-    Solution(Solution &so){cout<<"copy construcotr"<<endl; m_data=so.m_data;}
+    int StrToInt(string str)
+    { //返回值为0的几种情况区分，正负号、值范围保证2147483647~-2147483648，
+        if(str.length()==0) return 0;
+        int result=0,i,state=1;
 
-    string LeftRotateString(string str)
-    {
-        int i, j, index = 0, start = 0, len = str.length();
-        cout<<"str length: "<<len<<endl;
-        while(index<len && start<len) 
+        if(str[0]<='9'&&str[0]>='0') result=result*10+str[0]-'0';
+        else if(str[0]=='+')  state=1;
+        else if(str[0]=='-')  state=-1;
+        else return 0;
+
+        for(i=1;i<str.length();i++)
         {
-            while(index<len && str[index]!=' ') index++;
-            cout<<"start:"<<start<<" end:"<<index-1<<"    str:";
-            for(i=start;i<index;i++) cout<<str[i];
-            cout<<endl;
-            for(i=start,j=index-1;i<j;i++,j--) swap(str[i],str[j]);//翻转每一个子字符串
-            start=++index;//新的起始位置
+            if(str[i]>='0'&&str[i]<='9') result=result*10+str[i]-'0';
+            else return 0;
         }
 
-        for(i=0,j=len-1;i<j;i++,j--) swap(str[i],str[j]);
-        return str;        
-    } 
-private:
-    int m_data;
+        return state==-1?-result:result;
+    }
 };
 
 int main()
@@ -45,9 +41,10 @@ int main()
     // sort(vec.begin,vec.end(),less<int>());
     // for(auto foo:vec) cout<<foo<<" ";
     // cout<<endl;
-    for (char i = 0; i < 256; ++i)
-    {
-        printf("%d\n", i);
-    }
+    Solution solu;
+    int n=10;
+    cout<<"sum: "<<solu.StrToInt("d3234")<<endl;
+    cout << "sum: " << solu.StrToInt("-321") << endl;
+    cout << "sum: " << solu.StrToInt("+321") << endl;
     return 0;
 }
