@@ -11,7 +11,7 @@ SET(SOURCE_DIRECTORY  ${PROJECT_SOURCE_DIR}/src/ ${PROJECT_SOURCE_DIR}/demo/)  #
     
 include_directories(${PROJECT_SOURCE_DIR}/include) #include目录
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -m64 -O2")  #编译选项
+# SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -m64 -O2")  #编译选项
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -m64 -O2") #编译选项
 
 FOREACH(SOURCE_DIR ${SOURCE_DIRECTORY})    

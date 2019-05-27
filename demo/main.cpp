@@ -1,41 +1,65 @@
-#include <deque>
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <memory>
 #include <sstream>
+#include <set>
+#include <map>
 #include <string>
-#include <queue>
+#include <list>
+#include <functional>
+using namespace std;
+
+#include <iostream>
+#include <memory>
 using namespace std;
 
 class Solution
 {
 public:
-    bool IsContinuous(vector<int> numbers) //求是否位顺子
+    bool match(char *str, char *pattern)
     {
-        if(numbers.size()!=5) return false;
-        int count=0,sum=0,i,j;
-        for(i=0;i<5;i++) //这里进行选择排序
-        for(j=i+1;j<5;j++) if (numbers[i] > numbers[j])  swap(numbers[i], numbers[j]); 
+        char *p=str,*q=pattern;
+        while(*p!='\n') cout<<*(p++);
+        cout<<endl;
+        while(*q!='\n') cout<<*(q++);
+        cout<<endl;
 
-        for(i=0;i<4;i++) 
+
+        char temp;
+        while(*str!='\n' && *pattern!='\n')
         {
-            if(numbers[i]==0) count++; //记录大小王的个数
-            else if(numbers[i]==numbers[i+1]) return false;//如果有两值相等，肯定不行
-            else sum+=numbers[i+1]-numbers[i]; //记录差之和
+            if(*pattern=='.') str++, pattern++;//任意字符
+            if(*(pattern+1)=='*')
+            {
+                temp = *pattern;//记录下这个出现任意次的字符
+                while(*str==temp) 
+                {
+                    if(match(str,pattern+2)) return true;
+                    else str++;
+                }
+                pattern+=2;
+            }
+            else if(*str==*pattern) str++,pattern++;
+            else { cout<<*str<<"!="<<*pattern<<endl;return false;}
+            
         }
-        cout<<count<<"  "<<sum<<endl;
-        if(sum<5 && (sum-count)<5) return true; 
+        if(*str=='\n' && *pattern=='\n') return true;
         return false;
     }
 };
-
 int main()
 {
-    vector<vector<int> > ret;
     Solution solu;
-    vector<int> data = {1, 2, 3, 0, 0};
-    vector<int> data1 = {0, 0, 2, 1, 5};
-    cout<<"result: "<<boolalpha<<solu.IsContinuous(data1)<<endl;
-    return 0;
+    if(solu.match("aaa\n","a.a\n")) cout<<"match success!!"<<endl<<endl;
+    else cout<<"match fail!!!!"<<endl<<endl;
+
+    if(solu.match("aaa\n","ab*ac*a\n")) cout<<"match success!!"<<endl<<endl;
+    else cout<<"match fail!!!!"<<endl<<endl;
+
+    if(solu.match("aaa\n","aa.a\n")) cout<<"match success!!"<<endl<<endl;
+    else cout<<"match fail!!!!"<<endl<<endl;
+
+    if(solu.match("aaa\n","ab*a\n")) cout<<"match success!!"<<endl<<endl;
+    else cout<<"match fail!!!!"<<endl<<endl;
 }

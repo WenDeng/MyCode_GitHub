@@ -82,7 +82,18 @@ int main()
     for (int foo : vec1)  cout << foo << "  ";cout<<endl;
     for (int i=0;i<vec1.size();i++)  cout << &vec1[i] << "   ";
     cout<<endl;
-    
-    
+
+    cout << endl << "&&的真正含义--------------------------------------" << endl;
+    int ta = 3; // int &&tb=2;//临时对象的引用，即tb存的是临时对象2的地址
+    int tb = 2; //生成对象tb,并将2赋值给tb所指的地址中。 感觉两种的结果一样，但是含义不一样
+    cout << &ta << "  " << ta << endl;
+    cout << &tb << "  " << tb << endl;
+    cout << endl;
+    int tc = 1;
+    ta = tc;
+    tb = tc;
+    cout << &ta << "  " << ta << endl;
+    cout << &tb << "  " << tb << endl;
+
     return 0;
 }
