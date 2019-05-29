@@ -17,49 +17,54 @@ using namespace std;
 class Solution
 {
 public:
-    bool match(char *str, char *pattern)
+    bool isNumeric(char *string)
     {
-        char *p=str,*q=pattern;
-        while(*p!='\n') cout<<*(p++);
-        cout<<endl;
-        while(*q!='\n') cout<<*(q++);
-        cout<<endl;
-
-
-        char temp;
-        while(*str!='\n' && *pattern!='\n')
+        //"+100","5e2","-123","3.1416"和"-1E-16"
+        //12e","1a3.14","1.2.3","+-5"和"12e+4.3"
+        if(string==nullptr||*string=='.') return false;
+        bool hase=0,hasp;//记录e符合，记录小数
+        if(*string=='+'||*string=='-') string++;//有正负号
+        while(*string!='\0')
         {
-            if(*pattern=='.') str++, pattern++;//任意字符
-            if(*(pattern+1)=='*')
+            char last=*(string-1);//上一个字符
+            if(*string<='9' && *string>='0') continue;
+            else if(*string=='.')
             {
-                temp = *pattern;//记录下这个出现任意次的字符
-                while(*str==temp) 
-                {
-                    if(match(str,pattern+2)) return true;
-                    else str++;
-                }
-                pattern+=2;
+                if(hasp) return false;
+                hasp = true;
+                if(*(string-1)<='0'||*(string-1)>='9') return false;
+                if(*(string+1)<='0'||*(string-1)>='9') return false; 
             }
-            else if(*str==*pattern) str++,pattern++;
-            else { cout<<*str<<"!="<<*pattern<<endl;return false;}
-            
+            else if(*string=='e')
+            {
+                if(hase) return false;
+                hase=true;
+                if(last<='0'||last>='9') return false;
+            }
+            else if(*string=='+'||*string=='-')
+            {
+                if(last!='e') return false;
+            }
+            else return false;
+            string++;
         }
-        if(*str=='\n' && *pattern=='\n') return true;
-        return false;
+        return true;        
     }
 };
 int main()
 {
     Solution solu;
-    if(solu.match("aaa\n","a.a\n")) cout<<"match success!!"<<endl<<endl;
-    else cout<<"match fail!!!!"<<endl<<endl;
+    if(solu.isNumeric("+100")) cout<<"isNumeric"<<endl;
+    if(solu.isNumeric("5e2")) cout<<"isNumeric"<<endl;
+    if(solu.isNumeric("-123")) cout<<"isNumeric"<<endl;
+    if(solu.isNumeric("3.1416")) cout<<"isNumeric"<<endl;
+    if(solu.isNumeric("-1E-16")) cout<<"isNumeric"<<endl;
+    
+    cout<<endl;
+    if (solu.isNumeric("12e")) cout << "is Not Numeric" << endl;
+    if (solu.isNumeric("1a3.14")) cout << "is Not Numeric" << endl;
+    if (solu.isNumeric("1.2.3")) cout << "is Not Numeric" << endl;
+    if (solu.isNumeric("+-5")) cout << "is Not Numeric" << endl;
+    if (solu.isNumeric("12e+4.3")) cout << "is Not Numeric" << endl;
 
-    if(solu.match("aaa\n","ab*ac*a\n")) cout<<"match success!!"<<endl<<endl;
-    else cout<<"match fail!!!!"<<endl<<endl;
-
-    if(solu.match("aaa\n","aa.a\n")) cout<<"match success!!"<<endl<<endl;
-    else cout<<"match fail!!!!"<<endl<<endl;
-
-    if(solu.match("aaa\n","ab*a\n")) cout<<"match success!!"<<endl<<endl;
-    else cout<<"match fail!!!!"<<endl<<endl;
 }
