@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <queue>
 #include <memory>
 #include <sstream>
 #include <set>
@@ -10,61 +11,76 @@
 #include <functional>
 using namespace std;
 
-#include <iostream>
-#include <memory>
-using namespace std;
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {
+    }
+};
 
 class Solution
 {
 public:
-    bool isNumeric(char *string)
+    // void DoSerialize(string &str,TreeNode *root)
+    // {
+    //     if(root==NULL) str+="#";
+    //     DoSerialize(str,root->left);
+    //     str+=root->val;
+    //     DoSerialize(str,root->right);
+    //     cout<<str;
+    // }
+    // char* Serialize(TreeNode *root)
+    // {   //将二叉树转换为字符串
+    //     string str;
+    //     DoSerialize(str,root);
+
+    //     str="dengwen";
+    //     char *ret=new char[str.length()+1];
+    //     str.copy(ret,str.length(),0);//拷贝字符串
+    //     ret[str.length()]=='\0';
+    //     return ret;
+    // }
+
+    // TreeNode* Deserialize(char *str)
+    // { //将字符串转换为二叉树
+    // }
+
+    void midSearch(TreeNode *node, int &k, TreeNode **pp)
     {
-        //"+100","5e2","-123","3.1416"和"-1E-16"
-        //12e","1a3.14","1.2.3","+-5"和"12e+4.3"
-        if(string==nullptr||*string=='.') return false;
-        bool hase=0,hasp;//记录e符合，记录小数
-        if(*string=='+'||*string=='-') string++;//有正负号
-        while(*string!='\0')
-        {
-            char last=*(string-1);//上一个字符
-            if(*string<='9' && *string>='0') continue;
-            else if(*string=='.')
-            {
-                if(hasp) return false;
-                hasp = true;
-                if(*(string-1)<='0'||*(string-1)>='9') return false;
-                if(*(string+1)<='0'||*(string-1)>='9') return false; 
-            }
-            else if(*string=='e')
-            {
-                if(hase) return false;
-                hase=true;
-                if(last<='0'||last>='9') return false;
-            }
-            else if(*string=='+'||*string=='-')
-            {
-                if(last!='e') return false;
-            }
-            else return false;
-            string++;
-        }
-        return true;        
+        if (node == NULL) return;
+        if(node->left) midSearch(node->left, k, pp);
+        k--;
+        if (k == 0) *pp = node;
+        if(node->right) midSearch(node->right, k, pp);
+    }
+    TreeNode* KthNode(TreeNode *pRoot, int k)
+    {
+        if (pRoot == NULL) return NULL;
+        TreeNode *ret;
+        midSearch(pRoot, k, &ret);//获取指针变量的地址
+        return ret;
     }
 };
+
+int gVar=4;
+int *pVar=&gVar;
+void setvalue(int **p)
+{
+    *p=pVar;
+}
+
 int main()
 {
     Solution solu;
-    if(solu.isNumeric("+100")) cout<<"isNumeric"<<endl;
-    if(solu.isNumeric("5e2")) cout<<"isNumeric"<<endl;
-    if(solu.isNumeric("-123")) cout<<"isNumeric"<<endl;
-    if(solu.isNumeric("3.1416")) cout<<"isNumeric"<<endl;
-    if(solu.isNumeric("-1E-16")) cout<<"isNumeric"<<endl;
-    
-    cout<<endl;
-    if (solu.isNumeric("12e")) cout << "is Not Numeric" << endl;
-    if (solu.isNumeric("1a3.14")) cout << "is Not Numeric" << endl;
-    if (solu.isNumeric("1.2.3")) cout << "is Not Numeric" << endl;
-    if (solu.isNumeric("+-5")) cout << "is Not Numeric" << endl;
-    if (solu.isNumeric("12e+4.3")) cout << "is Not Numeric" << endl;
+    TreeNode *p = new TreeNode(3);
+    // cout<<solu.Serialize(p)<<endl;
+    TreeNode *q=solu.KthNode(p,1);
+    cout<<q->val<<endl;
+
+    int **q1;
+    setvalue(q1);
+    cout<<**q1<<endl;
+
 
 }
