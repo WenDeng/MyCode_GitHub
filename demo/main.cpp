@@ -1,99 +1,69 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <deque>
 #include <queue>
 #include <memory>
 #include <sstream>
 #include <set>
+#include <unordered_map>
 #include <map>
 #include <string>
 #include <list>
+#include <cstring>
 #include <functional>
 using namespace std;
 
-struct TreeNode {
-    int val;
-    struct TreeNode *left;
-    struct TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {
-    }
-};
-
-class Solution
+class LRUCache
 {
+private:
+    int m_capacity;
+    unordered_map<int,list< pair<int,int> >::iterator > position;//主要是用来定位key在链表的对应位置
+    list<pair<int,int>> cache; //用来缓存放入的数据对
 public:
-    void DoSerialize(string &str,TreeNode *root)
+    LRUCache(int capacity):m_capacity(capacity){}
+
+    int get(int key)
     {
-        if(root==NULL) {str+="#,";return;}
-        if(root) str += to_string(root->val) + ",";
-        DoSerialize(str,root->left);
-        DoSerialize(str,root->right);
-    }
-    char *Serialize(TreeNode *root) //将二叉树转换为字符串
-    {   
-        if(root==NULL) return NULL;
-        string str;
-        DoSerialize(str,root);
-        char *ret=new char[str.length()];  
-        str.copy(ret,str.length()-1,0);//拷贝字符串
-        ret[str.length()-1]=='\0';
-        return ret;
+        if(position.find(key)!=position.end()) //若缓存中已经存在该数据
+        {
+            put(key,position[key]->second);
+            return position[key]->second; 
+        }
+        return -1; //缓存中不存在该数据
     }
 
-    void DoDeserialize(TreeNode **node,char *str,int &index)
+    void put(int key, int value)
     {
-        if(str[index]=='\0') return ;
-        if(str[index]=='#')  //当前节点的左节点为空，直接返回。
+        if(position.find(key)!=position.end())  cache.erase(position[key]); //如果已经存在，则早期版本删除
+        else if(cache.size()>=m_capacity) //容量达到上线，需要空出一个位置
         {
-            index++;
-            return ;
+            position.erase(cache.back().first);//将对应的迭代器移除，避免后期复用
+            cache.pop_back();
         }
-
-        int value=0;
-        while(str[index]>='0' && str[index]<='9')
-        {
-            value=value*10+str[index]-'0';
-            index++;
-        }
-        *node=new TreeNode(value); //创建节点
-        DoDeserialize(&((*node)->left),str,++index);
-        DoDeserialize(&((*node)->right),str,++index);
-    }
-    TreeNode* Deserialize(char *str)
-    { 
-        //将字符串转换为二叉树
-        TreeNode *root=NULL;
-        if(!str) return root;
-        int index=0;//用来记录字符串的下标
-        DoDeserialize(&root, str, index);
-        return root;
+        cache.push_front(pair<int,int>(key,value));
+        position[key]=cache.begin();//设定key对应的迭代器
     }
 };
 
-
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
 
 int main()
 {
-    Solution solu;
-    TreeNode *p = new TreeNode(11);
-    TreeNode *node1 = new TreeNode(2);
-    TreeNode *node2 = new TreeNode(3);
-    TreeNode *node3 = new TreeNode(6);
-    TreeNode *node4 = new TreeNode(16);
-    p->left=node3;
-    p->left->left=node2;
-    p->left->left->left=node1;
-    p->right=node4;
-
-    TreeNode *ptr=NULL;
-
-    cout<<solu.Serialize(p)<<endl;
-
-    TreeNode *q=solu.Deserialize(solu.Serialize(p));
-    cout<<endl<<solu.Serialize(q)<<endl;
-    // string str="deng";
-    // string &str1=str;
-    // str1+=" wen";
-    // cout<<str1<<endl;
-
+    LRUCache obj(3);
+    cout<<obj.get(1)<<endl;
+    obj.put(1, 2);
+    obj.put(3, 3);
+    obj.put(4, 4);
+    cout<<obj.get(3)<<endl;
+    obj.put(5,6);
+    cout<<obj.get(1)<<endl;
+    cout<<obj.get(3)<<endl;
+    cout<<obj.get(4)<<endl;
+    cout<<obj.get(5)<<endl;
 }
