@@ -5,69 +5,141 @@
 #include <queue>
 #include <memory>
 #include <sstream>
+#include <stack>
 #include <set>
 #include <map>
 #include <string>
 #include <list>
 #include <cstring>
 #include <functional>
+#include<unordered_map>
 using namespace std;
 
-class Solution {
-public:
-    static bool myCompare(vector<int> &value1,vector<int> &value2)
+
+//求解抖音网络红人人数
+//目前的思路是用一个二维数组存储，一维数组上的每位表示对应的人是否关注他
+//此外还需要一个栈来进行深度遍历，表示关注当前人的人，并且需要访问对应维度上的人，将其加入当前用户的关注人群。
+int findTheAllNetStar(int n,int m, vector<pair<int,int>> &pp) //人数、关注对数、关注对
+{
+    vector<vector<int>> watchTable(n,vector<int>(n,0));//初始化一个n维数组，每一个值位vector<int>(n,0),即也是一个n维数组，且都为0
+
+    for(int k=0;k<m;k++)
     {
-        if(value1[0]==value2[0]) return value1[1]<=value2[1];
-        return value1[0]<value2[0];
+        int i=pp[k].first-1,j=pp[k].second-1;
+        watchTable[j][i]=1; //i关注了j
     }
 
-    int maxEnvelopes(vector<vector<int>>& envelopes) {
-        // 动态规划+二分查找求解
-        // （1）先将信封进行排序，主键宽度由小到大，为了方便二分查找，高度由大到小
-        // （2）用二分法依次从前往后求出每个信封对应的最大套数（对应为最大递增子序列）
-        if(!envelopes.size()) return 0;
-        sort(envelopes.begin(),envelopes.end(),[](vector<int> &va1,vector<int> &va2){
-            if(va1[0]==va2[0]) return va1[1]>va2[1]; //保证前面的大值被后面的小值冲掉，相当于消除了宽相等而高较大的值
-            return va1[0]<va2[0];} //用lamda表达式实现了函数
-            );//进行排序
-        
-        for(int i=0;i<envelopes.size();i++)  cout<<"["<<envelopes[i][0]<<","<<envelopes[i][1]<<"]    ";
+    for(int i=0;i<watchTable.size();i++)
+    {
+        for(int j=0;j<watchTable.size();j++)
+        cout<<watchTable[i][j]<<" ";
         cout<<endl;
+    }
 
-        int envsize=envelopes.size(),len=0;
-        vector<int> envque(envsize,0);
-        for(int i=0;i<envsize;i++)
+    for(int k=0;k<n;k++) //深度遍历求出每个用户的间接关注表
+    {   
+        cout<<endl<<"user number:"<<k<<"    遍历用户："; //----------------
+        static stack<int>  temp;//遍历栈
+        for(int t=0;t<n;t++)
         {
-            int temp=envelopes[i][1];
-            auto iter=lower_bound(envque.begin(),envque.begin()+len,temp); //这个算法用的是二分查找，寻找第一个不小于temp的迭代器
-            if(iter==(envque.begin()+len)) envque[len++]=temp;
-            else *iter=temp;
+            if(t!=k && watchTable[k][t]==1) temp.push(t); 
         }
-
-        for(int i=0;i<len;i++)  cout<<envque[i]<<" ";
+        while(!temp.empty())
+        {
+            int index=temp.top();
+            cout<<index<<" "; //---------------------------------------
+            temp.pop();
+            if(watchTable[k][index]==2) continue;//index用户已经遍历过，不再遍历
+            else //没有遍历过，需要遍历index用户的关注表
+            {
+                watchTable[k][index]=2;
+                for(int t=0;t<n;t++) //遍历index的关注列表，获取其中未关注k的人
+                {
+                    if(t!=k && watchTable[index][t]==1 && watchTable[k][t]==0) //t关注了index，t还没加入k的关注列表，那就添加
+                    {
+                        watchTable[k][t]=1; //添加
+                        temp.push(t);//将t加入遍历栈
+                    }
+                }
+            }
+        }
+    }
+        
+    cout<<endl;
+    for(int i=0;i<watchTable.size();i++)
+    {
+        for(int j=0;j<watchTable.size();j++)
+        cout<<watchTable[i][j]<<" ";
         cout<<endl;
-        return len;
+    }
+
+    int count=0;//用来记录网红人数
+    for(int i=0;i<n;i++)
+    {
+        bool state=true;
+        for(int j=0;j<n;j++)
+        {
+            if(i!=j && watchTable[i][j]==0) {state=false;break;}
+        }
+        if(state) count++;
+    }
+    return count;
+}
+
+
+//思路：这个题跟LRU有点类似
+class AllOne {
+public:
+    /** Initialize your data structure here. */
+    unordered_map<string,int> m_value; //存键值对
+    stack<int> m_max; //存最大值
+    stack<int> m_min; //存最小值
+
+    AllOne() {
+        
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    void inc(string key) 
+    {
+        if(m_value.find(key)!=m_value.end())  m_value[key]++;
+        else m_value[key]=1;
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    void dec(string key) 
+    {
+        if(m_value.find(key)==m_value.end()) return;
+        if(m_value[key]<=1) m_value.erase(key);
+        else m_value[key]--;
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    string getMaxKey() 
+    {
+        if()
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    string getMinKey() 
+    {
+        
     }
 };
 
-
-//priority queue的底层容器是vector,其没有迭代器，
 int main()
-{
-    int a[20]={1,2,3,4,5,5,6,7,8,9};
-    vector<int> vec(a,a+11); 
-
-    //优先级队列
-    priority_queue<int,vector<int>,greater<int> > prique(vec.begin(),vec.end()); //优先级队列
-    prique.push(23);
-    prique.push(24);
-    cout<<"priority queue size: "<<prique.size()<<endl;
-    while(!prique.empty())
-    {
-        cout<<prique.top()<<" ";
-        prique.pop();
-    }
-    cout<<endl;
-
-    return 0;
+{  
+    //
+    MinStack minstack;
+    minstack.push(1);
+    minstack.push(2);
+    cout<<"top:"<<minstack.top()<<endl;
+    cout<<"min:"<<minstack.getMin()<<endl;
+    minstack.pop();
+    cout<<"top:"<<minstack.top()<<endl;
+    cout<<"min:"<<minstack.getMin()<<endl;
+    minstack.pop();
+    cout<<"top:"<<minstack.top()<<endl;
+    cout<<"min:"<<minstack.getMin()<<endl;
 }
+
